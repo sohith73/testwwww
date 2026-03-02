@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint . --ext ts,tsx --max-warnings=0",
     "type-check": "tsc --noEmit",
+    "pages:build": "npx @cloudflare/next-on-pages",
     "prepare": "husky"
   },
   "lint-staged": {
