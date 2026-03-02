@@ -1,17 +1,16 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist } from "next/font/google";
 import "./globals.css";
 import { Space_Grotesk, Inter } from "next/font/google";
 import Script from "next/script";
 import { PHProvider } from "@/src/components/PostHogProvider";
 import WhatsAppButton from "@/src/components/WhatsAppButton/WhatsAppButton";
-import BlogImagePreloader from "@/src/components/BlogImagePreloader";
-import TestimonialImagePreloader from "@/src/components/homePageHappyUsers/TestimonialImagePreloader";
 
+// Only load weights actually used in the site - fewer weights = faster font load
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   variable: "--font-space-grotesk",
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
   preload: true,
 });
@@ -19,9 +18,9 @@ const spaceGrotesk = Space_Grotesk({
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
-  preload: true,
+  preload: false, // Only used in navbar CSS - don't block initial render
 });
 
 const geistSans = Geist({
@@ -29,12 +28,6 @@ const geistSans = Geist({
   subsets: ["latin"],
   display: "swap",
   preload: true,
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -114,7 +107,7 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-import ClientLogicWrapper from "@/src/components/ClientLogicWrapper";
+import GlobalModals from "@/src/components/ClientLogicWrapper";
 import { FB_PIXEL_ID } from "@/lib/metaPixel";
 
 export default function RootLayout({
@@ -134,12 +127,16 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
-        {/* Satoshi Font - Preconnect and load with display=swap */}
-        <link rel="preconnect" href="https://api.fontshare.com" crossOrigin="anonymous" />
-        <link
-          href="https://api.fontshare.com/v2/css?f[]=satoshi@500&display=swap"
-          rel="stylesheet"
-        />
+        {/* Satoshi Font - Load async to avoid render-blocking */}
+        <link rel="dns-prefetch" href="https://api.fontshare.com" />
+        <Script id="load-satoshi-font" strategy="afterInteractive">
+          {`
+            var link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'https://api.fontshare.com/v2/css?f[]=satoshi@500&display=swap';
+            document.head.appendChild(link);
+          `}
+        </Script>
         {/* Calendly CSS - Load asynchronously to avoid blocking render */}
         <Script id="load-calendly-css" strategy="lazyOnload">
           {`
@@ -176,16 +173,13 @@ export default function RootLayout({
       </head>
       <body
         suppressHydrationWarning
-        className={`${geistSans.variable} ${geistMono.variable} ${spaceGrotesk.variable} ${inter.variable} antialiased`}
+        className={`${geistSans.variable} ${spaceGrotesk.variable} ${inter.variable} antialiased`}
       >
         <PHProvider>
-          <ClientLogicWrapper>
-            {children}
-            <WhatsAppButton />
-          </ClientLogicWrapper>
+          {children}
         </PHProvider>
-        <BlogImagePreloader />
-        <TestimonialImagePreloader />
+        <WhatsAppButton />
+        <GlobalModals />
         {/* Meta Pixel - Load with afterInteractive strategy */}
         <Script
           id="meta-pixel"

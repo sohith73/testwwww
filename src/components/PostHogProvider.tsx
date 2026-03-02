@@ -5,8 +5,8 @@ import { useEffect, Suspense } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { captureUTMParams } from "@/src/utils/captureUTMParams";
 
-// Inner component to handle pageview tracking
-function PostHogPageView({ children }: { children: React.ReactNode }) {
+// Standalone tracking component - renders nothing, only tracks pageviews
+function PostHogPageView() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const posthog = usePostHog();
@@ -23,13 +23,13 @@ function PostHogPageView({ children }: { children: React.ReactNode }) {
       if (searchParams && searchParams.toString()) {
         url = url + `?${searchParams.toString()}`;
       }
-      
+
       // Get country context
       const isCanada = pathname.startsWith("/en-ca");
-      const countryCode = typeof window !== "undefined" 
+      const countryCode = typeof window !== "undefined"
         ? localStorage.getItem("ff_country_code_v1") || (isCanada ? "CA" : "US")
         : "US";
-      
+
       // Get UTM parameters
       const utmSource = typeof window !== "undefined"
         ? localStorage.getItem("utm_source") || new URLSearchParams(window.location.search).get("utm_source")
@@ -46,7 +46,7 @@ function PostHogPageView({ children }: { children: React.ReactNode }) {
       const utmTerm = typeof window !== "undefined"
         ? localStorage.getItem("utm_term") || new URLSearchParams(window.location.search).get("utm_term")
         : null;
-      
+
       // PostHog automatically tracks pageviews, but we ensure it captures route changes
       posthog.capture("$pageview", {
         $current_url: url,
@@ -62,7 +62,7 @@ function PostHogPageView({ children }: { children: React.ReactNode }) {
     }
   }, [pathname, searchParams, posthog]);
 
-  return <>{children}</>;
+  return null;
 }
 
 export function PHProvider({ children }: { children: React.ReactNode }) {
@@ -104,9 +104,10 @@ export function PHProvider({ children }: { children: React.ReactNode }) {
       apiKey={process.env.NEXT_PUBLIC_POSTHOG_KEY}
       options={posthogOptions}
     >
-      <Suspense fallback={<>{children}</>}>
-        <PostHogPageView>{children}</PostHogPageView>
+      <Suspense fallback={null}>
+        <PostHogPageView />
       </Suspense>
+      {children}
     </PostHogProvider>
   );
 }

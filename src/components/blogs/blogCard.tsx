@@ -24,7 +24,7 @@ type Blog = {
   };
 };
 
-export default function BlogCard({ blog }: { blog: Blog }) {
+export default function BlogCard({ blog, priority = false }: { blog: Blog; priority?: boolean }) {
   const router = useRouter();
 
   // Ensure slug exists before rendering link
@@ -57,6 +57,7 @@ export default function BlogCard({ blog }: { blog: Blog }) {
             height={250}
             className="w-full h-full object-cover transition-transform duration-300 block"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority={priority}
           />
         </div>
 

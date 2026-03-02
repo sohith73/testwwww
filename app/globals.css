@@ -19,9 +19,8 @@
   }
 }
 
-html {
-  scroll-behavior: smooth;
-}
+/* scroll-behavior: smooth removed from html - it makes Next.js page navigations
+   feel sluggish. Smooth scrolling is handled programmatically where needed. */
 
 body {
   background: var(--background);

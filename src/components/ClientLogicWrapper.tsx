@@ -12,11 +12,7 @@ import StrategyCallCard from "@/src/components/schedule-call/StrategyCallCard";
 import MeetingBookedModal from "@/src/components/meetingBooked/MeetingBookedModal";
 import * as fbq from "@/lib/metaPixel";
 
-function ClientLogicWrapperContent({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+function GlobalModalsContent() {
     const pathname = usePathname();
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -429,7 +425,6 @@ function ClientLogicWrapperContent({
 
     return (
         <>
-            {children}
             <GeoBlockModal
                 isVisible={showGeoBlockModal}
                 onClose={handleGeoBlockModalClose}
@@ -482,14 +477,10 @@ function ClientLogicWrapperContent({
     );
 }
 
-export default function ClientLogicWrapper({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+export default function GlobalModals() {
     return (
-        <Suspense fallback={<>{children}</>}>
-            <ClientLogicWrapperContent>{children}</ClientLogicWrapperContent>
+        <Suspense fallback={null}>
+            <GlobalModalsContent />
         </Suspense>
     );
 }

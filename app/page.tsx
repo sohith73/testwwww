@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import HomePage from "@/src/components/pages/home/Home";
 import HomeImagePreloader from "./HomeImagePreloader";
+import TestimonialImagePreloader from "@/src/components/homePageHappyUsers/TestimonialImagePreloader";
 
 export const metadata: Metadata = {
   title: "Flashfire: Automate Job Applications with AI",
@@ -143,6 +144,7 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <HomeImagePreloader />
+      <TestimonialImagePreloader />
       <HomePage />
     </>
   );

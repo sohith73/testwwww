@@ -8,6 +8,9 @@ import Navbar from "@/src/components/navbar/navbar";
 import Footer from "@/src/components/footer/footer";
 import { slugToCategory, getAllCategorySlugs } from "@/src/utils/blogCategoryUtils";
 
+// Strip content server-side: only metadata reaches client for category listings
+const blogPostsMeta = blogPosts.map(({ content, ...meta }) => meta) as import("@/src/components/blogs/blogsClient").BlogPostMeta[];
+
 export const dynamicParams = true;
 
 type Props = {
@@ -190,7 +193,7 @@ export default async function BlogSlugPage({ params }: Props) {
       <>
         <Navbar />
         <Suspense fallback={<div style={{ padding: "6rem 2rem", textAlign: "center" }}>Loading blogs...</div>}>
-          <BlogsClient categorySlug={slug} />
+          <BlogsClient categorySlug={slug} posts={blogPostsMeta} />
         </Suspense>
         <Footer />
       </>

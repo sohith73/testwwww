@@ -2,13 +2,22 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   compress: true,
-  
+
+  // Production performance: power prefetch for instant navigation
+  experimental: {
+    optimizeCss: true,
+  },
+
+  // Aggressive static generation for fast page loads
+  reactStrictMode: true,
+  poweredByHeader: false, // Remove X-Powered-By header (security + tiny perf gain)
+
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     qualities: [75, 85],
-    minimumCacheTTL: 31536000,
+    minimumCacheTTL: 31536000, // 1 year
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
     remotePatterns: [
@@ -52,16 +61,9 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "www.adobe.com",
       },
-      {
-        protocol: "https",
-        hostname: "pub-4518f8276e4445ffb4ae9629e58c26af.r2.dev",
-      },
     ],
   },
-  
-  experimental: {
-    optimizeCss: true,
-  },
+
   async headers() {
     return [
       {
@@ -85,6 +87,7 @@ const nextConfig: NextConfig = {
           }
         ],
       },
+      // Immutable cache for static assets - browsers will never re-fetch
       {
         source: '/images/:path*',
         headers: [
@@ -105,6 +108,26 @@ const nextConfig: NextConfig = {
       },
       {
         source: '/_next/image/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      // Cache fonts aggressively
+      {
+        source: '/fonts/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      // Cache favicon and logo assets
+      {
+        source: '/logo/:path*',
         headers: [
           {
             key: 'Cache-Control',
@@ -141,7 +164,6 @@ const nextConfig: NextConfig = {
         destination: "/privacy-policy",
         permanent: true,
       },
-      // Redirect malformed routes
       {
         source: "/&",
         destination: "/",
@@ -162,7 +184,6 @@ const nextConfig: NextConfig = {
         destination: "/blog/the-job-hunt-nearly-broke-me-until-i-discovered-this-one-strategy-that-changed-everything",
         permanent: true,
       },
-      // Redirect old feature pages to new /features/ paths
       {
         source: "/ats-optimized-resume-checker",
         destination: "/features/resume-optimizer",
