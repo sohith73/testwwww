@@ -52,9 +52,8 @@ export default function TermsOfService() {
             <p className="text-gray-700 mb-6">
               Flashfire is an AI-powered platform built to help international
               students and professionals optimize their LinkedIn profiles for job
-              opportunities in the United States. Effective February 12th,
-              Flashfire focuses exclusively on LinkedIn profile optimization and
-              enhancement services.
+              opportunities in the United States. Flashfire provides LinkedIn
+              optimization suggestions only.
             </p>
 
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
@@ -142,7 +141,7 @@ export default function TermsOfService() {
                 Service Scope - LinkedIn Optimization Only:
               </h3>
               <p className="text-gray-700">
-                Effective February 12th, Flashfire will exclusively provide LinkedIn optimization services. We will focus solely on LinkedIn profile enhancement and optimization. Other services previously offered may no longer be available.
+                Flashfire will only be providing LinkedIn optimization suggestions. We will not be handling LinkedIn accounts from March 12th, 2026.
               </p>
             </div>
 
