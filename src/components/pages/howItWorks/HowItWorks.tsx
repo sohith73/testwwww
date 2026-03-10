@@ -176,7 +176,7 @@ export default function HowItWorks() {
                 <span className="w-2 h-2 rounded-full bg-[#ff4c00]"></span>
                 How it works
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-[1.1] mb-6">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-[1.1] mb-6">
                 AI Job Application Software That Helps You{" "}
                 <span className="text-[#ff4c00]">Apply Automatically</span>
               </h1>
@@ -240,7 +240,7 @@ export default function HowItWorks() {
         <section className="mt-20">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <span className="inline-block text-sm font-bold tracking-widest text-[#ff4c00] uppercase mb-4">The Process</span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
               How Our AI Job Application Software Works
             </h2>
             <p className="text-lg text-gray-600">
@@ -257,14 +257,14 @@ export default function HowItWorks() {
                 const Icon = step.icon;
                 const isEven = index % 2 === 0;
                 return (
-                  <div key={index} className="relative md:grid md:grid-cols-2 md:gap-8 md:items-center">
+                  <div key={index} className="relative md:grid md:grid-cols-2 md:gap-20 md:items-center">
                     {/* Timeline dot */}
                     <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 w-12 h-12 bg-[#ff4c00] rounded-full items-center justify-center text-white font-bold text-lg shadow-lg z-10">
                       {index + 1}
                     </div>
 
                     {/* Content */}
-                    <div className={`${isEven ? 'md:pr-16 md:text-right' : 'md:col-start-2 md:pl-16'} mb-6 md:mb-0`}>
+                    <div className={`${isEven ? 'md:pr-24 md:text-right' : 'md:col-start-2 md:pl-24'} mb-15 md:mb-0`}>
                       <div className="bg-white rounded-2xl p-6 md:p-8 shadow-lg ring-1 ring-orange-100 hover:shadow-xl transition-shadow duration-300">
                         <div className={`inline-flex items-center gap-2 mb-4 ${isEven ? 'md:flex-row-reverse' : ''}`}>
                           <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
@@ -307,7 +307,7 @@ export default function HowItWorks() {
             <div className="relative grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
               <div className="lg:col-span-1">
                 <span className="inline-block text-sm font-bold tracking-widest text-orange-400 uppercase mb-4">Live Demo</span>
-                <h3 className="text-3xl md:text-4xl font-bold mb-4">
+                <h3 className="text-2xl md:text-3xl font-bold mb-4">
                   Watch Flashfire in Action
                 </h3>
                 <p className="text-gray-300 mb-6 leading-relaxed">
@@ -334,7 +334,7 @@ export default function HowItWorks() {
         <section className="mt-20">
           <div className="text-center max-w-3xl mx-auto mb-12">
             <span className="inline-block text-sm font-bold tracking-widest text-[#ff4c00] uppercase mb-4">Why Choose Us</span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
               Built for Results, Not Just Applications
             </h2>
           </div>
@@ -370,7 +370,7 @@ export default function HowItWorks() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
               <div>
                 <span className="inline-block text-sm font-bold tracking-widest text-[#ff4c00] uppercase mb-4">Who It's For</span>
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+                <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
                   Who Is This AI Job Application Software For?
                 </h2>
                 <p className="text-lg text-gray-600 leading-relaxed mb-6">
@@ -391,7 +391,7 @@ export default function HowItWorks() {
                     key={index}
                     className="group bg-gradient-to-br from-orange-50 to-white rounded-2xl p-6 border border-orange-100 hover:border-orange-300 hover:shadow-lg transition-all duration-300"
                   >
-                    <div className="text-4xl font-bold text-orange-200 mb-3 group-hover:text-[#ff4c00] transition-colors duration-300">
+                    <div className="text-3xl font-bold text-orange-200 mb-3 group-hover:text-[#ff4c00] transition-colors duration-300">
                       {persona.num}
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 mb-2">{persona.title}</h3>
@@ -407,7 +407,7 @@ export default function HowItWorks() {
         <section className="mt-20 max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <span className="inline-block text-sm font-bold tracking-widest text-[#ff4c00] uppercase mb-4">FAQ</span>
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
               Frequently Asked Questions
             </h2>
           </div>
@@ -440,7 +440,7 @@ export default function HowItWorks() {
         {/* FINAL CTA - Full Width Impact */}
         <section className="mt-20">
           <div className="bg-gradient-to-r from-[#ff4c00] to-orange-600 rounded-3xl p-8 md:p-12 lg:p-16 text-white shadow-2xl text-center">
-            <h3 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 max-w-4xl mx-auto">
+            <h3 className="text-2xl md:text3xl lg:text-4xl font-bold mb-6 max-w-4xl mx-auto">
               Ready to Turn Your Job Hunt Into Interview Calls?
             </h3>
             <p className="text-lg md:text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
