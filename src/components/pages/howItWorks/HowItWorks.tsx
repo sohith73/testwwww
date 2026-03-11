@@ -238,7 +238,7 @@ export default function HowItWorks() {
                       <div className="text-2xl font-bold text-gray-900">1 Week</div>
                       <div className="text-sm text-gray-500">To First Interview</div>
                     </div>
-
+                    s
                   </div>
                 </div>
               </div>
@@ -248,57 +248,88 @@ export default function HowItWorks() {
 
 
         {/* STEPS SECTION - Modern Timeline Design */}
-        <section className="mt-20">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <span className="inline-block text-sm font-bold tracking-widest text-[#ff4c00] uppercase mb-4">The Process</span>
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-6">
+        <section className="mt-32 px-6 lg:px-10">
+          <div className="text-center max-w-3xl mx-auto mb-24">
+            <span className="inline-block text-sm font-bold tracking-widest text-[#ff4c00] uppercase mb-4">
+              The Process
+            </span>
+
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
               How Our AI Job Application Software Works
             </h2>
+
             <p className="text-lg text-gray-600">
-              From profile setup to interview calls—four simple steps to your dream job.
+              From profile setup to interview calls — four simple steps to your dream job.
             </p>
           </div>
 
-          <div className="relative">
-            {/* Timeline line - hidden on mobile */}
-            <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#ff4c00] via-orange-300 to-orange-100"></div>
+          <div className="relative max-w-7xl mx-auto">
 
-            <div className="space-y-12 md:space-y-0">
+            {/* Timeline line */}
+            <div className="hidden md:block absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-[#ff4c00] via-orange-300 to-orange-100"></div>
+
+            <div className="space-y-15">
               {steps.map((step, index) => {
                 const Icon = step.icon;
                 const isEven = index % 2 === 0;
+
                 return (
-                  <div key={index} className="relative md:grid md:grid-cols-2 md:gap-20 md:items-center">
-                    {/* Timeline dot */}
-                    <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 w-12 h-12 bg-[#ff4c00] rounded-full items-center justify-center text-white font-bold text-lg shadow-lg z-10">
+                  <div
+                    key={index}
+                    className="relative md:grid md:grid-cols-2 md:gap-24 md:items-center"
+                  >
+                    {/* Timeline circle */}
+                    <div className="hidden md:flex absolute left-1/2 transform -translate-x-1/2 w-14 h-14 bg-[#ff4c00] rounded-full items-center justify-center text-white font-bold text-lg shadow-xl z-10">
                       {index + 1}
                     </div>
 
                     {/* Content */}
-                    <div className={`${isEven ? 'md:pr-24 md:text-right' : 'md:col-start-2 md:pl-24'} mb-15 md:mb-0`}>
-                      <div className="bg-white rounded-2xl p-6 md:p-8 shadow-lg ring-1 ring-orange-100 hover:shadow-xl transition-shadow duration-300">
-                        <div className={`inline-flex items-center gap-2 mb-4 ${isEven ? 'md:flex-row-reverse' : ''}`}>
+                    <div
+                      className={`${isEven
+                          ? "md:pr-32 md:text-right"
+                          : "md:col-start-2 md:pl-32"
+                        }`}
+                    >
+                      <div className="bg-white rounded-2xl p-8 shadow-xl ring-1 ring-orange-100 hover:shadow-2xl transition duration-300">
+
+                        <div
+                          className={`inline-flex items-center gap-3 mb-5 ${isEven ? "md:flex-row-reverse" : ""
+                            }`}
+                        >
                           <div className="w-12 h-12 bg-orange-100 rounded-xl flex items-center justify-center">
                             <Icon className="text-[#ff4c00] text-xl" />
                           </div>
+
+                          {/* Mobile step number */}
                           <span className="md:hidden w-8 h-8 bg-[#ff4c00] rounded-full flex items-center justify-center text-white font-bold text-sm">
                             {index + 1}
                           </span>
                         </div>
-                        <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-3">{step.heading}</h3>
-                        <p className="text-gray-600 leading-relaxed">{step.description}</p>
+
+                        <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
+                          {step.heading}
+                        </h3>
+
+                        <p className="text-gray-600 leading-relaxed">
+                          {step.description}
+                        </p>
                       </div>
                     </div>
 
                     {/* Image */}
-                    <div className={`${isEven ? 'md:col-start-2 md:pl-16' : 'md:col-start-1 md:row-start-1 md:pr-16'} flex justify-center`}>
-                      <div className="bg-gradient-to-br from-orange-50 to-white rounded-2xl p-6 border border-orange-100">
+                    <div
+                      className={`${isEven
+                          ? "md:col-start-2 md:pl-24"
+                          : "md:col-start-1 md:row-start-1 md:pr-24"
+                        } flex justify-center`}
+                    >
+                      <div className="bg-gradient-to-br from-orange-50 to-white rounded-2xl p-8 border border-orange-100 shadow-md">
                         <Image
                           src={step.image}
                           alt={step.heading}
-                          width={280}
-                          height={280}
-                          className="w-full max-w-[280px] h-auto object-contain"
+                          width={300}
+                          height={300}
+                          className="w-full max-w-[300px] h-auto object-contain"
                         />
                       </div>
                     </div>
