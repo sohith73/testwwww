@@ -10,7 +10,7 @@ import { GTagUTM } from "@/src/utils/GTagUTM";
 import { trackButtonClick, trackExternalLink } from "@/src/utils/PostHogTracking";
 import { WHATSAPP_SUPPORT_URL } from "@/src/utils/whatsapp";
 import styles from "@/src/components/homePageFAQ/homePageFAQ.module.css";
-import { FaCheck, FaPlus, FaTimes, FaArrowRight, FaPlay, FaUsers, FaRobot, FaBriefcase, FaPhoneAlt } from "react-icons/fa";
+import { FaCheck, FaPlus, FaTimes, FaArrowRight, FaClock, FaUsers, FaRobot, FaBriefcase, FaPhoneAlt } from "react-icons/fa";
 
 const differentiators = [
   "Designed for international students: visa-aware matching (OPT, CPT, STEM OPT, H-1B).",
@@ -199,42 +199,53 @@ export default function HowItWorks() {
             <div className="order-1 lg:order-2 flex justify-center">
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-orange-200 to-orange-100 rounded-3xl transform rotate-3 opacity-50"></div>
+
                 <div className="relative bg-gradient-to-br from-orange-50 to-white rounded-3xl p-8 border border-orange-100 shadow-2xl">
                   <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-white rounded-2xl p-4 shadow-md border border-orange-50">
-                      <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center mb-3">
-                        <FaUsers className="text-[#ff4c00]" />
-                      </div>
-                      <div className="text-2xl font-bold text-gray-900">1000+</div>
-                      <div className="text-sm text-gray-500">Jobs Applied</div>
-                    </div>
+
+                    {/* Metric 1 */}
                     <div className="bg-white rounded-2xl p-4 shadow-md border border-orange-50">
                       <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center mb-3">
                         <FaBriefcase className="text-[#ff4c00]" />
                       </div>
-                      <div className="text-2xl font-bold text-gray-900">2-6</div>
-                      <div className="text-sm text-gray-500">Weeks to Interview</div>
+                      <div className="text-2xl font-bold text-gray-900">300K+</div>
+                      <div className="text-sm text-gray-500">Jobs Applied</div>
                     </div>
+
+                    {/* Metric 2 */}
                     <div className="bg-white rounded-2xl p-4 shadow-md border border-orange-50">
                       <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center mb-3">
-                        <FaRobot className="text-[#ff4c00]" />
+                        <FaUsers className="text-[#ff4c00]" />
                       </div>
-                      <div className="text-2xl font-bold text-gray-900">AI</div>
-                      <div className="text-sm text-gray-500">Powered</div>
+                      <div className="text-2xl font-bold text-gray-900">95%</div>
+                      <div className="text-sm text-gray-500">Users Receive Interviews</div>
                     </div>
+
+                    {/* Metric 3 */}
                     <div className="bg-white rounded-2xl p-4 shadow-md border border-orange-50">
                       <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center mb-3">
                         <FaPhoneAlt className="text-[#ff4c00]" />
                       </div>
-                      <div className="text-2xl font-bold text-gray-900">24/7</div>
-                      <div className="text-sm text-gray-500">Support</div>
+                      <div className="text-2xl font-bold text-gray-900">7–10</div>
+                      <div className="text-sm text-gray-500">Avg Interview Calls</div>
                     </div>
+
+                    {/* Metric 4 */}
+                    <div className="bg-white rounded-2xl p-4 shadow-md border border-orange-50">
+                      <div className="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center mb-3">
+                        <FaClock className="text-[#ff4c00]" />
+                      </div>
+                      <div className="text-2xl font-bold text-gray-900">1 Week</div>
+                      <div className="text-sm text-gray-500">To First Interview</div>
+                    </div>
+
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </section>
+
 
         {/* STEPS SECTION - Modern Timeline Design */}
         <section className="mt-20">
@@ -299,36 +310,49 @@ export default function HowItWorks() {
         </section>
 
         {/* DEMO SECTION - Card with Video */}
-        <section className="mt-20">
-          <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl p-8 md:p-12 lg:p-16 text-white shadow-2xl overflow-hidden relative">
-            {/* Background decoration */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-[#ff4c00] opacity-10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
+        <section className="mt-24">
+          <div className="relative bg-gradient-to-br from-orange-50 to-white rounded-3xl px-8 py-16 md:px-12 lg:px-20 text-gray-900 shadow-xl ring-1 ring-orange-100 overflow-hidden">
 
-            <div className="relative grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
-              <div className="lg:col-span-1">
-                <span className="inline-block text-sm font-bold tracking-widest text-orange-400 uppercase mb-4">Live Demo</span>
-                <h3 className="text-2xl md:text-3xl font-bold mb-4">
-                  Watch Flashfire in Action
-                </h3>
-                <p className="text-gray-300 mb-6 leading-relaxed">
-                  See how our AI handles end-to-end job applications—from sourcing to submission.
-                </p>
-                <button
-                  onClick={() => handleTalkToExpertClick("demo")}
-                  className="inline-flex items-center gap-2 rounded-xl bg-white text-gray-900 px-6 py-3 font-semibold transition-all duration-300 hover:bg-orange-50"
-                >
-                  Talk to an Expert
-                  <FaArrowRight className="text-sm" />
-                </button>
-              </div>
-              <div className="lg:col-span-2">
-                <div className="rounded-2xl overflow-hidden ring-4 ring-white/10 shadow-2xl bg-black">
-                  <HomePageVideo />
-                </div>
-              </div>
+
+            {/* Background Glow */}
+            <div className="absolute inset-0 flex justify-center">
+              <div className="w-[500px] h-[500px] bg-[#ff4c00] opacity-10 blur-3xl rounded-full"></div>
             </div>
+
+            <div className="relative max-w-5xl mx-auto text-center">
+
+              <span className="inline-block text-sm font-bold tracking-widest text-[#ff4c00] uppercase mb-4">
+                Live Demo
+              </span>
+
+              <h3 className="text-3xl md:text-4xl font-bold mb-6">
+                Watch Flashfire in Action
+              </h3>
+
+              <p className="text-gray-600 text-lg mb-12 max-w-2xl mx-auto">
+                See how our AI handles end-to-end job applications—from sourcing to submission.
+              </p>
+
+              {/* Video */}
+              <div className="rounded-2xl overflow-hidden ring-4 ring-orange-100 shadow-2xl bg-white mb-10">
+                <HomePageVideo />
+              </div>
+
+              {/* CTA */}
+              <button
+                onClick={() => handleTalkToExpertClick("demo")}
+                className="inline-flex items-center gap-2 rounded-xl bg-[#ff4c00] px-8 py-4 text-white font-semibold shadow-lg shadow-orange-500/20 transition-all duration-300 hover:bg-[#e64400] hover:-translate-y-0.5"
+              >
+                Talk to an Expert
+                <FaArrowRight className="text-sm" />
+              </button>
+
+            </div>
+
+
           </div>
         </section>
+
 
         {/* WHY FLASHFIRE - Bento Grid Layout */}
         <section className="mt-20">
@@ -404,36 +428,42 @@ export default function HowItWorks() {
         </section>
 
         {/* FAQ SECTION - Clean Accordion */}
-        <section className="mt-20 max-w-4xl mx-auto">
-          <div className="text-center mb-12">
-            <span className="inline-block text-sm font-bold tracking-widest text-[#ff4c00] uppercase mb-4">FAQ</span>
-            <h2 className="text-2xl md:text-3xl font-bold text-gray-900">
-              Frequently Asked Questions
-            </h2>
-          </div>
+        <section className="mt-20 flex justify-center">
+          <div className="w-full max-w-5xl">
+            <div className={`${styles.header} mb-12 text-center`}>
+              <span className="inline-block text-sm font-bold tracking-widest text-[#ff4c00] uppercase mb-4">FAQ</span>
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
+                Frequently Asked Questions About Applying for Jobs Automatically with AI
+              </h2>
+              <p className="mt-4 text-gray-600">
+                Ask us anything—here are the essentials to get you started.
+              </p>
+            </div>
 
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <div
-                key={index}
-                className={`bg-white rounded-2xl shadow-sm ring-1 ring-orange-100 overflow-hidden transition-all duration-300 ${activeFaq === index ? 'ring-2 ring-[#ff4c00]' : ''}`}
-              >
-                <button
-                  className="w-full flex items-center justify-between p-6 text-left"
-                  onClick={() => setActiveFaq(activeFaq === index ? null : index)}
+            <div className={`${styles.faqContainer} w-full`}>
+              {faqs.map((faq, index) => (
+                <div
+                  key={index}
+                  className={`${styles.faqItem} ${activeFaq === index ? styles.active : ""}`}
                 >
-                  <span className="font-semibold text-gray-900 pr-4">{faq.q}</span>
-                  <span className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 ${activeFaq === index ? 'bg-[#ff4c00] text-white' : 'bg-orange-100 text-[#ff4c00]'}`}>
-                    {activeFaq === index ? <FaTimes className="text-sm" /> : <FaPlus className="text-sm" />}
-                  </span>
-                </button>
-                {activeFaq === index && (
-                  <div className="px-6 pb-6">
-                    <p className="text-gray-600 leading-relaxed">{faq.a}</p>
-                  </div>
-                )}
-              </div>
-            ))}
+                  <button
+                    className={styles.faqQuestion}
+                    onClick={() => setActiveFaq(activeFaq === index ? null : index)}
+                  >
+                    <span>{faq.q}</span>
+                    <span className={styles.icon}>
+                      {activeFaq === index ? <FaTimes /> : <FaPlus />}
+                    </span>
+                  </button>
+
+                  {activeFaq === index && (
+                    <div className={styles.faqAnswer}>
+                      <p>{faq.a}</p>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
