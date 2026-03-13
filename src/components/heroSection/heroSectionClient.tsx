@@ -195,9 +195,9 @@ export default function HeroSectionClient({ data }: Props) {
                 src={url}
                 alt={`User ${i + 1}`}
                 fill
-                sizes="2.2rem"
+                sizes="36px"
                 className="object-cover"
-                unoptimized
+                loading="eager"
               />
             </div>
           ))}

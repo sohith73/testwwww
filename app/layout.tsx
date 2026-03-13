@@ -1,10 +1,9 @@
 import type { Metadata, Viewport } from "next";
-import { Geist } from "next/font/google";
 import "./globals.css";
 import { Space_Grotesk, Inter } from "next/font/google";
 import Script from "next/script";
 import { PHProvider } from "@/src/components/PostHogProvider";
-import WhatsAppButton from "@/src/components/WhatsAppButton/WhatsAppButton";
+import LayoutExtras from "@/src/components/LayoutExtras";
 
 // Only load weights actually used in the site - fewer weights = faster font load
 const spaceGrotesk = Space_Grotesk({
@@ -21,13 +20,6 @@ const inter = Inter({
   weight: ["400", "500", "600", "700"],
   display: "swap",
   preload: false, // Only used in navbar CSS - don't block initial render
-});
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-  display: "swap",
-  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -107,7 +99,6 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-import GlobalModals from "@/src/components/ClientLogicWrapper";
 import { FB_PIXEL_ID } from "@/lib/metaPixel";
 
 export default function RootLayout({
@@ -129,7 +120,7 @@ export default function RootLayout({
         />
         {/* Satoshi Font - Load async to avoid render-blocking */}
         <link rel="dns-prefetch" href="https://api.fontshare.com" />
-        <Script id="load-satoshi-font" strategy="afterInteractive">
+        <Script id="load-satoshi-font" strategy="lazyOnload">
           {`
             var link = document.createElement('link');
             link.rel = 'stylesheet';
@@ -172,13 +163,12 @@ export default function RootLayout({
       </head>
       <body
         suppressHydrationWarning
-        className={`${geistSans.variable} ${spaceGrotesk.variable} ${inter.variable} antialiased`}
+        className={`${spaceGrotesk.variable} ${inter.variable} antialiased`}
       >
         <PHProvider>
           {children}
         </PHProvider>
-        <WhatsAppButton />
-        <GlobalModals />
+        <LayoutExtras />
         {/* Meta Pixel - Load with afterInteractive strategy */}
         <Script
           id="meta-pixel"
@@ -207,12 +197,12 @@ export default function RootLayout({
             alt=""
           />
         </noscript>
-        {/* Google Analytics - Load with lower priority */}
+        {/* Single gtag.js load — configures BOTH GA4 and Google Ads (was loaded twice before) */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-4P890VGD8D"
           strategy="lazyOnload"
         />
-        <Script id="google-analytics" strategy="lazyOnload">
+        <Script id="google-analytics-and-ads" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag() {
@@ -222,33 +212,13 @@ export default function RootLayout({
             gtag("config", "G-4P890VGD8D", {
               page_path: window.location.pathname,
             });
+            ${process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID ? `gtag("config", "${process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID}", { page_path: window.location.pathname });` : ''}
           `}
         </Script>
-        {/* Google Ads Conversion Tracking - Load with afterInteractive strategy */}
-        {process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID}`}
-              strategy="afterInteractive"
-            />
-            <Script id="google-ads" strategy="afterInteractive">
-              {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag() {
-                  dataLayer.push(arguments);
-                }
-                gtag("js", new Date());
-                gtag("config", "${process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_ID}", {
-                  page_path: window.location.pathname,
-                });
-              `}
-            </Script>
-          </>
-        )}
-        {/* LinkedIn Insight Tag - Load with afterInteractive strategy */}
+        {/* LinkedIn Insight Tag - Load with lazyOnload (was afterInteractive — not critical for FCP) */}
         {process.env.NEXT_PUBLIC_LINKEDIN_PARTNER_ID && (
           <>
-            <Script id="linkedin-insight-tag" strategy="afterInteractive">
+            <Script id="linkedin-insight-tag" strategy="lazyOnload">
               {`
                 _linkedin_partner_id = "${process.env.NEXT_PUBLIC_LINKEDIN_PARTNER_ID}";
                 window._linkedin_data_partner_ids = window._linkedin_data_partner_ids || [];
@@ -304,4 +274,3 @@ export default function RootLayout({
     </html>
   );
 }
-
