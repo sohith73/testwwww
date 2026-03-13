@@ -864,6 +864,24 @@ export default function NavbarClient({ links, ctas }: Props) {
     window.history.pushState({}, "", normalized);
   };
 
+  // Prefetch all feature routes on hover — ensures instant navigation
+  const featuresPrefetched = useRef(false);
+  const prefetchFeatureRoutes = useCallback(() => {
+    if (featuresPrefetched.current) return;
+    featuresPrefetched.current = true;
+    const routes = [
+      "/features/ats-resume-optimizer",
+      "/features/automated-job-applications",
+      "/features/linkedin-profile-optimization-tool",
+      "/features/ai-job-targeting",
+      "/features/job-application-tracker",
+      "/features/dashboard-analytics",
+      "/features/ai-cover-letter-generator",
+      "/features/interview-tips",
+    ];
+    routes.forEach((r) => router.prefetch(getHref(r)));
+  }, [router, getHref]);
+
   const { getButtonProps } = useGeoBypass({
     onBypass: () => {
       if (typeof window !== "undefined") {
@@ -1187,6 +1205,7 @@ export default function NavbarClient({ links, ctas }: Props) {
                       if (isFeaturesLink) {
                         cancelFeatureClose();
                         setIsFeatureOpen(true);
+                        prefetchFeatureRoutes();
                       }
                     }}
                     onMouseLeave={() => {

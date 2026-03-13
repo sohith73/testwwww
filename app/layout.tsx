@@ -4,6 +4,7 @@ import { Space_Grotesk, Inter } from "next/font/google";
 import Script from "next/script";
 import { PHProvider } from "@/src/components/PostHogProvider";
 import LayoutExtras from "@/src/components/LayoutExtras";
+import RoutePrefetcher from "@/src/components/RoutePrefetcher";
 
 // Only load weights actually used in the site - fewer weights = faster font load
 const spaceGrotesk = Space_Grotesk({
@@ -169,6 +170,7 @@ export default function RootLayout({
           {children}
         </PHProvider>
         <LayoutExtras />
+        <RoutePrefetcher />
         {/* Meta Pixel - Load with afterInteractive strategy */}
         <Script
           id="meta-pixel"
