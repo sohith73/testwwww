@@ -78,35 +78,30 @@ function PostHogPageView() {
         localStorage.setItem("visitor_id", visitorId);
       }
 
-      // Track to MongoDB (non-blocking) via backend API
+      // Track to MongoDB (non-blocking) via backend API — deferred to idle time
       if (typeof window !== "undefined") {
-        const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.flashfirejobs.com";
-        fetch(`${API_BASE_URL}/api/track/page-visit`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            visitorId: visitorId,
-            pageUrl: url,
-            referrer: document.referrer || null,
-            utmSource: utmSource || null,
-            utmMedium: utmMedium || null,
-            utmCampaign: utmCampaign || null,
-            utmContent: utmContent || null,
-            utmTerm: utmTerm || null,
-            sessionId: sessionId,
-            metadata: {
-              pathname: pathname,
-              searchParams: searchParams?.toString() || null,
-              countryCode: countryCode,
-              isCanada: isCanada,
-            },
-          }),
-        }).catch((error) => {
-          // Silently fail - don't break the app if tracking fails
-          console.error("MongoDB tracking error:", error);
-        });
+        const doTrack = () => {
+          const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://api.flashfirejobs.com";
+          fetch(`${API_BASE_URL}/api/track/page-visit`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            keepalive: true, // survives page navigations
+            body: JSON.stringify({
+              visitorId, pageUrl: url,
+              referrer: document.referrer || null,
+              utmSource: utmSource || null, utmMedium: utmMedium || null,
+              utmCampaign: utmCampaign || null, utmContent: utmContent || null,
+              utmTerm: utmTerm || null, sessionId,
+              metadata: { pathname, searchParams: searchParams?.toString() || null, countryCode, isCanada },
+            }),
+          }).catch(() => {});
+        };
+        // Use requestIdleCallback to avoid blocking main thread during navigation
+        if ("requestIdleCallback" in window) {
+          requestIdleCallback(doTrack, { timeout: 3000 });
+        } else {
+          setTimeout(doTrack, 100);
+        }
       }
     }
   }, [pathname, searchParams, posthog]);

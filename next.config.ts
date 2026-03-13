@@ -3,9 +3,14 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   compress: true,
 
-  // Production performance: power prefetch for instant navigation
+  // Production performance
   experimental: {
     optimizeCss: true,
+    // Cache client-side navigations — instant back/forward button and revisits
+    staleTimes: {
+      dynamic: 30,  // 30s cache for dynamic pages
+      static: 180,  // 3min cache for static pages
+    },
   },
 
   // Aggressive static generation for fast page loads

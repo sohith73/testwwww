@@ -3,15 +3,18 @@
 import { useEffect, useState, useRef, Suspense } from "react";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { captureUTMParams } from "@/src/utils/UTMUtils";
-import GeoBlockModal from "@/src/components/modals/GeoBlockModal";
-import GeoBypassSuccessModal from "@/src/components/modals/GeoBypassSuccessModal";
-import SignupModal from "@/src/components/signupModal/SignupModal";
-import CalendlyModal from "@/src/components/calendlyModal/CalendlyModal";
 import { loadFormData } from "@/src/utils/LocalStorageUtils";
-import StrategyCallCard from "@/src/components/schedule-call/StrategyCallCard";
-import MeetingBookedModal from "@/src/components/meetingBooked/MeetingBookedModal";
+import dynamic from "next/dynamic";
 import * as fbq from "@/lib/metaPixel";
 import * as linkedin from "@/lib/linkedinInsightTag";
+
+// Lazy-load all modal components — they're never visible on first paint
+const GeoBlockModal = dynamic(() => import("@/src/components/modals/GeoBlockModal"), { ssr: false });
+const GeoBypassSuccessModal = dynamic(() => import("@/src/components/modals/GeoBypassSuccessModal"), { ssr: false });
+const SignupModal = dynamic(() => import("@/src/components/signupModal/SignupModal"), { ssr: false });
+const CalendlyModal = dynamic(() => import("@/src/components/calendlyModal/CalendlyModal"), { ssr: false });
+const StrategyCallCard = dynamic(() => import("@/src/components/schedule-call/StrategyCallCard"), { ssr: false });
+const MeetingBookedModal = dynamic(() => import("@/src/components/meetingBooked/MeetingBookedModal"), { ssr: false });
 
 function GlobalModalsContent() {
     const pathname = usePathname();
@@ -37,11 +40,11 @@ function GlobalModalsContent() {
     // Track button clicks to force show modal
     const [forceShowModal, setForceShowModal] = useState(false);
     const [forceShowCalendlyModal, setForceShowCalendlyModal] = useState(false);
-    
+
     // Track geo-block bypass state
     const [geoBypassActive, setGeoBypassActive] = useState(false);
     const [showBypassSuccessModal, setShowBypassSuccessModal] = useState(false);
-    
+
     // Track which route visit we're on and if modals have been dismissed
     const lastRouteWithModalRef = useRef<string | null>(null);
     const modalDismissedForRouteRef = useRef<string | null>(null);
@@ -70,7 +73,7 @@ function GlobalModalsContent() {
     // Listen for button click events from anywhere in the app
     useEffect(() => {
         const handleButtonClick = () => {
-            
+
             setForceShowModal(true);
             // Reset dismissed state so modal can show
             modalDismissedForRouteRef.current = null;
@@ -81,7 +84,7 @@ function GlobalModalsContent() {
             setGeoBypassActive(true);
             setShowGeoBlockModal(false);
             setShowBypassSuccessModal(true);
-            
+
             // If on /book-now route, also trigger Calendly modal after bypass
             if (pathnameRef.current === '/book-now') {
                 setForceShowCalendlyModal(true);
@@ -113,7 +116,7 @@ function GlobalModalsContent() {
         window.addEventListener('bypassGeoBlock', handleGeoBypass);
         window.addEventListener('showGeoBypassSuccess', handleShowBypassSuccess);
         window.addEventListener('showStrategyCallCard', handleStrategyCallCard);
-        
+
         return () => {
             window.removeEventListener('showGetMeInterviewModal', handleButtonClick);
             window.removeEventListener('showCalendlyModal', handleCalendlyModal);
@@ -165,15 +168,13 @@ function GlobalModalsContent() {
     // Handle Route-based Modals & Geo-Blocking
     useEffect(() => {
         // Check if forceShowCalendlyModal is true FIRST (button clicked from any page) - show modal without navigation
-        // This allows modal to show on features/pricing/how-it-works pages while keeping that page visible
-        // IMPORTANT: Check this BEFORE geoLoading check so modal can show immediately
         if (forceShowCalendlyModal) {
             setForceShowCalendlyModal(false); // Reset the flag
             modalDismissedForRouteRef.current = null; // Reset dismissed state
-            
+
             // Save scroll position before opening modal to prevent scroll-to-top
             const currentScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
-            
+
             // Check if user is from India - show geo-block modal instead
             if (!geoLoading && isFromIndia && !geoBypassActive) {
                 setShowGeoBlockModal(true);
@@ -185,7 +186,7 @@ function GlobalModalsContent() {
                 setShowSignupModal(false);
                 setShowGeoBlockModal(false);
             }
-            
+
             // Restore scroll position after modal opens to prevent scroll-to-top
             if (typeof window !== 'undefined' && currentScrollY > 0) {
                 requestAnimationFrame(() => {
@@ -198,19 +199,17 @@ function GlobalModalsContent() {
                     });
                 });
             }
-            
-            return; // Don't process route-based logic when showing modal from button click
+
+            return;
         }
 
-        // Check if forceShowModal is true (button clicked from any page) - show modal without navigation
-        // This allows modal to show on testimonials page while keeping that page visible
-        // IMPORTANT: Check this BEFORE geoLoading check so modal can show immediately
+        // Check if forceShowModal is true (button clicked from any page)
         if (forceShowModal) {
             setForceShowModal(false);
             modalDismissedForRouteRef.current = null;
-            
+
             const currentScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
-            
+
             if (!geoLoading && isFromIndia && !geoBypassActive) {
                 setShowGeoBlockModal(true);
                 setShowCalendlyModal(false);
@@ -221,7 +220,7 @@ function GlobalModalsContent() {
                 setShowSignupModal(false);
                 setShowGeoBlockModal(false);
             }
-            
+
             if (typeof window !== 'undefined' && currentScrollY > 0) {
                 requestAnimationFrame(() => {
                     window.scrollTo({ top: currentScrollY, behavior: 'instant' });
@@ -233,7 +232,7 @@ function GlobalModalsContent() {
                     });
                 });
             }
-            
+
             return;
         }
 
@@ -255,11 +254,11 @@ function GlobalModalsContent() {
 
         // Handle /book-now route - show Calendly modal with geo-blocking
         if (isBookNow) {
-            
+
             if (forceShowCalendlyModal) {
                 setForceShowCalendlyModal(false);
                 modalDismissedForRouteRef.current = null;
-                
+
                 // Check if user is from India - show geo-block modal instead
                 if (isFromIndia && !geoBypassActive) {
                     setShowGeoBlockModal(true);
@@ -270,18 +269,15 @@ function GlobalModalsContent() {
                 }
                 return;
             }
-            
+
             if (lastRouteWithModalRef.current !== currentRouteKey) {
                 modalDismissedForRouteRef.current = null;
                 lastRouteWithModalRef.current = currentRouteKey;
             }
-            
+
             const wasDismissed = modalDismissedForRouteRef.current === currentRouteKey;
-            
-            // Show modal if it hasn't been dismissed (works for both direct visits and button clicks)
-            // This allows the modal to open when visiting /book-now directly from email links
+
             if (!wasDismissed) {
-                // Check if user is from India - show geo-block modal instead
                 if (isFromIndia && !geoBypassActive) {
                     setShowGeoBlockModal(true);
                     setShowCalendlyModal(false);
@@ -303,15 +299,14 @@ function GlobalModalsContent() {
         if (isGetMeInterview || isScheduleCareerCall || isBookMyDemoCall || isSignup || isBookDemo) {
             // Check if user has already submitted the form
             const hasSubmitted = typeof window !== "undefined" && localStorage.getItem("submitted") === "true";
-            
+
             // If forceShowModal is true (button was clicked), always show modal
             if (forceShowModal) {
-                setForceShowModal(false); // Reset the flag
-                modalDismissedForRouteRef.current = null; // Reset dismissed state
-                
-                // Save scroll position before opening modal to prevent scroll-to-top
+                setForceShowModal(false);
+                modalDismissedForRouteRef.current = null;
+
                 const currentScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
-                
+
                 if (isFromIndia && !geoBypassActive) {
                     setShowGeoBlockModal(true);
                     setShowSignupModal(false);
@@ -322,8 +317,7 @@ function GlobalModalsContent() {
                         setShowSignupModal(false);
                     }
                 }
-                
-                // Restore scroll position after modal opens to prevent scroll-to-top
+
                 if (typeof window !== 'undefined' && currentScrollY > 0) {
                     requestAnimationFrame(() => {
                         window.scrollTo({ top: currentScrollY, behavior: 'instant' });
@@ -335,45 +329,35 @@ function GlobalModalsContent() {
                         });
                     });
                 }
-                
+
                 return;
             }
-            
+
             // For /get-me-interview, /schedule-a-free-career-call, and /book-my-demo-call routes: only show modal automatically if URL has query params
-            // This prevents modal from showing on refresh when URL is clean (no query params)
             if ((isGetMeInterview || isScheduleCareerCall || isBookMyDemoCall) && !searchParams.toString()) {
                 return;
             }
-            
-            // If navigating to a new route visit (different from last), reset dismissed state
-            // This handles the case where user clicks button again after navigating away
+
             if (lastRouteWithModalRef.current !== currentRouteKey) {
                 modalDismissedForRouteRef.current = null;
                 lastRouteWithModalRef.current = currentRouteKey;
             }
 
-            // Check if modal was already dismissed for this route visit
             const wasDismissed = modalDismissedForRouteRef.current === currentRouteKey;
 
-            // Only show modal if it hasn't been dismissed for this route visit
             if (!wasDismissed) {
                 if (isFromIndia && !geoBypassActive) {
                     setShowGeoBlockModal(true);
                     setShowSignupModal(false);
                 } else {
-                    // If not from India, show the appropriate modal for the route
                     if (isGetMeInterview || isScheduleCareerCall || isBookMyDemoCall || isSignup) {
                         const savedFormData = loadFormData();
                         setShowCalendlyModal(true);
                         setShowSignupModal(false);
                     }
-                    // Note: Booking modal logic could be added here if needed
                 }
             }
         } else {
-            // Don't close modals when on other routes - modals can be opened from any page via button click
-            // Only reset dismissed state if modals aren't showing (they'll close themselves when user clicks close)
-            // This allows modals to stay open when opened from non-modal routes like /image-testimonials
             if (!showGeoBlockModal && !showCalendlyModal && !showSignupModal) {
                 modalDismissedForRouteRef.current = null;
                 lastRouteWithModalRef.current = null;
@@ -386,8 +370,7 @@ function GlobalModalsContent() {
         const currentRouteKey = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
         modalDismissedForRouteRef.current = currentRouteKey;
         setShowGeoBlockModal(false);
-        
-        // Clean URL by removing query params when on /get-me-interview, /schedule-a-free-career-call, or /book-my-demo-call
+
         if ((pathname === '/get-me-interview' || pathname === '/schedule-a-free-career-call' || pathname === '/book-my-demo-call') && searchParams.toString()) {
             router.replace(pathname);
         }
@@ -397,21 +380,16 @@ function GlobalModalsContent() {
         const currentRouteKey = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
         modalDismissedForRouteRef.current = currentRouteKey;
         setShowCalendlyModal(false);
-        
-        // If we came from a specific page (features, pricing, etc.), navigate back to it
+
         if (typeof window !== "undefined" && (pathname === '/book-now' || pathname === '/en-ca/book-now')) {
             const previousPage = sessionStorage.getItem('previousPageBeforeBookNow');
             if (previousPage) {
-                // Clear the stored previous page
                 sessionStorage.removeItem('previousPageBeforeBookNow');
-                
-                // Navigate back to the previous page
                 router.push(previousPage);
                 return;
             }
         }
-        
-        // Clean URL by removing query params when on /book-now
+
         if ((pathname === '/book-now' || pathname === '/en-ca/book-now') && searchParams.toString()) {
             router.replace(pathname);
         }
@@ -421,51 +399,60 @@ function GlobalModalsContent() {
         const currentRouteKey = `${pathname}${searchParams.toString() ? `?${searchParams.toString()}` : ''}`;
         modalDismissedForRouteRef.current = currentRouteKey;
         setShowSignupModal(false);
-        
-        // Clean URL by removing query params when on /get-me-interview, /schedule-a-free-career-call, or /book-my-demo-call
+
         if ((pathname === '/get-me-interview' || pathname === '/schedule-a-free-career-call' || pathname === '/book-my-demo-call') && searchParams.toString()) {
             router.replace(pathname);
         }
     };
 
+    // Only render modals that are actually visible — avoids mounting hidden modal DOM
+    const anyModalVisible = showGeoBlockModal || showBypassSuccessModal || showSignupModal || showCalendlyModal || showStrategyCallCard || showMeetingBookedModal;
+    if (!anyModalVisible) return null;
 
     return (
         <>
-            <GeoBlockModal
-                isVisible={showGeoBlockModal}
-                onClose={handleGeoBlockModalClose}
-                onProvideAnyway={handleGeoBlockModalClose}
-            />
-            <GeoBypassSuccessModal
-                isVisible={showBypassSuccessModal}
-                onClose={() => setShowBypassSuccessModal(false)}
-            />
-            <SignupModal
-                isOpen={showSignupModal}
-                onClose={handleSignupModalClose}
-            />
-            <CalendlyModal
-                isVisible={showCalendlyModal}
-                onClose={handleCalendlyModalClose}
-                user={(() => {
-                    // Load user data from localStorage if available
-                    if (typeof window !== "undefined") {
-                        const savedFormData = loadFormData();
+            {showGeoBlockModal && (
+                <GeoBlockModal
+                    isVisible={showGeoBlockModal}
+                    onClose={handleGeoBlockModalClose}
+                    onProvideAnyway={handleGeoBlockModalClose}
+                />
+            )}
+            {showBypassSuccessModal && (
+                <GeoBypassSuccessModal
+                    isVisible={showBypassSuccessModal}
+                    onClose={() => setShowBypassSuccessModal(false)}
+                />
+            )}
+            {showSignupModal && (
+                <SignupModal
+                    isOpen={showSignupModal}
+                    onClose={handleSignupModalClose}
+                />
+            )}
+            {showCalendlyModal && (
+                <CalendlyModal
+                    isVisible={showCalendlyModal}
+                    onClose={handleCalendlyModalClose}
+                    user={(() => {
+                        if (typeof window !== "undefined") {
+                            const savedFormData = loadFormData();
+                            return {
+                                fullName: savedFormData.fullName || "",
+                                email: savedFormData.email || "",
+                                phone: savedFormData.phone || "",
+                                countryCode: savedFormData.countryCode || "",
+                            };
+                        }
                         return {
-                            fullName: savedFormData.fullName || "",
-                            email: savedFormData.email || "",
-                            phone: savedFormData.phone || "",
-                            countryCode: savedFormData.countryCode || "",
+                            fullName: "",
+                            email: "",
+                            phone: "",
+                            countryCode: "",
                         };
-                    }
-                    return {
-                        fullName: "",
-                        email: "",
-                        phone: "",
-                        countryCode: "",
-                    };
-                })()}
-            />
+                    })()}
+                />
+            )}
             {showStrategyCallCard && (
                 <div
                     className="fixed inset-0 z-[9980] bg-black/40 backdrop-blur-sm flex items-center justify-center px-4 py-8"
